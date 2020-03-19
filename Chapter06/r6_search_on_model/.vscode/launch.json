@@ -1,0 +1,21 @@
+{
+    // Use IntelliSense para saber los atributos posibles.
+    // Mantenga el puntero para ver las descripciones de los existentes atributos.
+    // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Adjuntar",
+            "type": "python",
+            "request": "attach",
+            "port": 5678,
+            "host": "192.168.100.16",
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "/var/odoo12/ejercicios/Chapter06/r6_search_on_model/"
+                }
+            ]
+        }
+    ]
+}

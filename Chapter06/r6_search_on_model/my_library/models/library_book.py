@@ -41,7 +41,7 @@ class LibraryBook(models.Model):
             if book.is_allowed_transition(book.state, new_state):
                 book.state = new_state
             else:
-                message = _('Moving from %s to %s is not allowd') % (book.state, new_state)
+                message = _('Pasar de %s a %s no está permitido') % (book.state, new_state)
                 raise UserError(message)
 
     def make_available(self):
