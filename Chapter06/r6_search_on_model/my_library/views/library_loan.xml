@@ -4,43 +4,55 @@
         <field name="name">Book Loans</field>
         <field name="res_model">library.loan</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">calendar,tree,form</field>
     </record>
 
     <menuitem name="Book Loans" id="library_loan_menu" parent="library_base_menu" action="library_loan_action"/>
 
-        <!-- Form View -->
-        <record id="library_loan_view_form" model="ir.ui.view">
-            <field name="name">Library Loan Form</field>
-            <field name="model">library.loan</field>
-            <field name="arch" type="xml">
-                <form>
+    <!-- Calendar View -->
+    <record id='library_loan_view_calendar' model="ir.ui.view">
+        <field name="name">Library Loan Calendar</field>
+        <field name="model">library.loan</field>
+        <field name="arch" type="xml">
+            <calendar string="Calendario de préstamos" date_start="date_start" date_stop="date_end" mode="week" color="book_id" form_view_id="library_loan_view_form">
+                <field name="member_id"/>
+                <field name="book_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="library_loan_view_form" model="ir.ui.view">
+        <field name="name">Library Loan Form</field>
+        <field name="model">library.loan</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
                     <group>
-                        <group>
-                            <field name="member_id" widget="many2one_tags"/>
-                            <field name="member_image" widget="image" class="oe_avatar"/>
-                        </group>
-                        <group>
-                            <field name="book_id" widget="many2one_tags"/>
-                            <field name="date_start"/>
-                            <field name="date_end"/>
-                        </group>
+                        <field name="member_id" widget="many2one_tags"/>
+                        <field name="member_image" widget="image" class="oe_avatar"/>
                     </group>
-                </form>
-            </field>
-        </record>
-    
-        <!-- Tree(list) View -->
-        <record id="library_loan_view_tree" model="ir.ui.view">
-            <field name="name">Library Loan List</field>
-            <field name="model">library.loan</field>
-            <field name="arch" type="xml">
-                <tree>
-                    <field name="member_id"/>
-                    <field name="book_id"/>
-                    <field name="date_start"/>
-                    <field name="date_end"/>
-                </tree>
-            </field>
-        </record>
+                    <group>
+                        <field name="book_id" widget="many2one_tags"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree(list) View -->
+    <record id="library_loan_view_tree" model="ir.ui.view">
+        <field name="name">Library Loan List</field>
+        <field name="model">library.loan</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="member_id"/>
+                <field name="book_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+            </tree>
+        </field>
+    </record>
 </odoo>

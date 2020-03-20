@@ -1,15 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <record id='library_book_action' model='ir.actions.act_window'>
         <field name="name">Library Books</field>
         <field name="res_model">library.book</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form</field>
     </record>
 
     <menuitem name="My Library" id="library_base_menu" />
     <menuitem name="Books" id="library_book_menu" parent="library_base_menu" action="library_book_action"/>
+
+    <!-- Kanban View -->
+    <record id="library_book_view_kanban" model="ir.ui.view">
+        <field name="name">Library Book Kanban</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="book_image"/>
+                <field name="is_lent"/>
+                <field name="state"/>
+                <field name="last_loan_end" />               
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <a type="open">
+                                <strong><field name="name"/> </strong>
+                            </a>
+                            <t t-if="record.book_image.raw_value">                                    
+                                <div class="o_kanban_image_fill_left d-none d-md-block">
+                                    <img class="o_kanban_image_inner_pic" style="max-height: 100px;max-width: 100px" t-att-alt="record.id.value" t-att-src="kanban_image('library.book', 'book_image', record.id.raw_value)"/>
+                                </div>
+                            </t>
+                            <t t-if="record.is_lent.raw_value">
+                                Book is Lent! until:
+                                <field name="last_loan_end" />
+                            </t>  
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
 
     <!-- Form View -->
     <record id="library_book_view_form" model="ir.ui.view">
