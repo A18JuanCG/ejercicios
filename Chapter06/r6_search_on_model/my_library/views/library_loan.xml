@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id='library_loan_action' model='ir.actions.act_window'>
+        <field name="name">Book Loans</field>
+        <field name="res_model">library.loan</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Book Loans" id="library_loan_menu" parent="library_base_menu" action="library_loan_action"/>
+</odoo>
