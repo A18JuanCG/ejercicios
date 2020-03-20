@@ -11,25 +11,28 @@ logger = logging.getLogger(__name__)
 
 class LibraryLoan(models.Model):
     _name = 'library.loan'
+    _description = 'Library Loan'
     _rec_name = 'book_id'
     _order = 'date_end desc'
 
     member_id = fields.Many2one('library.member', required = True)
     book_id = fields.Many2one('library.book', required = True)
     date_start = fields.Date('Fecha de inicio', default = lambda *a:datetime.now().strftime('%Y-%m-%d'))
-    date_end = fields.Date('Fecha de fin', default = (datetime.now() + timedelta(days=5)).strftime('%Y-%m-%d'))
+    date_end = fields.Date('Fecha de fin', default = (datetime.now() + timedelta(days=6)).strftime('%Y-%m-%d'))
     member_image = fields.Binary('Member image', related = 'member_id.partner_id.image')
 
     @api.constrains('book_id')
     def check_lent(self):
-         for book in self:
+         for loan in self:
+            book = loan.book_id
             domain = ['&',('book_id.id', '=', book.id), ('date_end', '>=', datetime.now())]
-            if self.env['library.loan'].search(domain, count=True) > 1:
-                raise UserError('Book is lent!')
+            book.is_lent = self.search(domain, count=True) > 1 
+            if book.is_lent:
+                raise models.ValidationError('Book is Lent!') 
 
-    @api.constrains('date_start')
+    @api.constrains('date_end', 'date_start')
     def chek_date(self):
-        if date_start >= date_end:
+        if self.date_start >= self.date_end:
             raise UserError('Start date after end date!')
 
 class LibraryBook(models.Model):
@@ -47,15 +50,25 @@ class LibraryBook(models.Model):
         ('borrowed', 'Borrowed'),
         ('lost', 'Lost')],
         'State', default="draft")
-    is_lent = fields.Boolean('Is lent?')
+
+    is_lent = fields.Boolean('Lent', compute='check_lent', default=False)
     book_image = fields.Binary('Portada')
     loan_ids = fields.One2many('library.loan', inverse_name = 'book_id')
+    last_loan_end = fields.Date('Fecha Final Reserva', compute='get_last_loan_end', store=False)
 
     @api.multi
     def check_lent(self):
         for book in self:
             domain = ['&',('book_id.id', '=', book.id), ('date_end', '>=', datetime.now())]
             book.is_lent = self.env['library.loan'].search(domain, count=True) > 0
+
+    @api.multi
+    def get_last_loan_end(self):
+        for book in self:
+            if book.is_lent:
+                for loan in book.loan_ids:            
+                    book.last_loan_end = loan.date_end
+                    return
 
     @api.model
     def is_allowed_transition(self, old_state, new_state):

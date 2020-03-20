@@ -30,12 +30,14 @@
                     <group>
                         <field name="name"/>
                         <field name="author_ids" widget="many2many_tags"/>
+                        <field name="book_image" widget="image" class="oe_avatar"/>
                     </group>
                     <group>
                         <field name="category_id"/>
                         <field name="date_release"/>
                         <field name="date_updated"/>
                         <field name="is_lent"/>
+                        <field name="loan_ids" widget="one2many_tags"/>
                     </group>
                 </group>
             </form>

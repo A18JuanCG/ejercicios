@@ -8,4 +8,39 @@
     </record>
 
     <menuitem name="Book Loans" id="library_loan_menu" parent="library_base_menu" action="library_loan_action"/>
+
+        <!-- Form View -->
+        <record id="library_loan_view_form" model="ir.ui.view">
+            <field name="name">Library Loan Form</field>
+            <field name="model">library.loan</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="member_id" widget="many2one_tags"/>
+                            <field name="member_image" widget="image" class="oe_avatar"/>
+                        </group>
+                        <group>
+                            <field name="book_id" widget="many2one_tags"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+    
+        <!-- Tree(list) View -->
+        <record id="library_loan_view_tree" model="ir.ui.view">
+            <field name="name">Library Loan List</field>
+            <field name="model">library.loan</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="member_id"/>
+                    <field name="book_id"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                </tree>
+            </field>
+        </record>
 </odoo>
